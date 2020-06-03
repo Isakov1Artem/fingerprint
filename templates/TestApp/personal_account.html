@@ -1,0 +1,81 @@
+{% extends 'TestApp/base.html' %}
+
+{% block content %}
+    <div id='iris-photos'>
+        <p>Загрузите фотографии радужки глаза, чтобы разблокировать возможность аутентификации с помощью нее.</p>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input name='form_type' value='iris' hidden/>
+            <table class='no_error table'>
+                <thead>
+                    <tr>
+                    <th scope="col">Фото сетчатки</th>
+                    <th scope="col">Удалить?</th>
+                    </tr>
+                </thead>
+                {% for form in formsets.iris_formset.forms %}
+                    {% for hidden in form.hidden_fields %}
+                        {{ hidden }}
+                    {% endfor %}
+                    <div class="form-group">
+                        {{ form.non_field_errors }}
+                        {{ form.errors }}
+                        <tbody>
+                            <tr>
+                                <td> {{ form.iris_image }} </td>
+                                <td>
+                                {% if iris_formset.can_delete %}
+                                    {{ form.DELETE }}
+                                {% endif %}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </div>
+                {% endfor %}
+                {{ formsets.iris_formset.management_form }}
+            </table>
+            <button type="submit">Сохранить радужку</button>
+        </form>
+    </div>
+    
+    <div id="fingerprint-photos">
+      <p>Загрузите фотографии отпечатка пальца, чтобы разблокировать возможность аутентификации с помощью него.</p>
+      <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input name='form_type' value='fingerprint' hidden/>
+          <table class='no_error table'>
+              <thead>
+                  <tr>
+                  <th scope="col">Фото отпечатка пальца</th>
+                  <th scope="col">Удалить?</th>
+                  </tr>
+              </thead>
+              {% for form in formsets.fingerprint_formset.forms %}
+                  {% for hidden in form.hidden_fields %}
+                      {{ hidden }}
+                  {% endfor %}
+                  <div class="form-group">
+                      {{ form.non_field_errors }}
+                      {{ form.errors }}
+                      <tbody>
+                          <tr>
+                              <td> {{ form.fingerprint_image }} </td>
+                              <td>
+                              {% if fingerprint_formset.can_delete %}
+                                  {{ form.DELETE }}
+                              {% endif %}
+                              </td>
+                          </tr>
+                      </tbody>
+                  </div>
+              {% endfor %}
+              {{ formsets.fingerprint_formset.management_form }}
+          </table>
+          <button type="submit">Сохранить отпечаток пальца</button>
+      </form>
+    </div>
+
+    <div id='face-photos'>
+
+    </div>
+{% endblock %}
